@@ -9,6 +9,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.nn.utils
+from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence
 from model_embeddings import ModelEmbeddings
 
 Hypothesis = namedtuple('Hypothesis', ['value', 'score'])
@@ -313,7 +314,7 @@ class NMT(nn.Module):
 
         # Set e_t to -inf where enc_masks has 1
         if enc_masks is not None:
-            e_t.data.masked_fill_(enc_masks.byte(), -float('inf'))
+            e_t.data.masked_fill_(enc_masks.bool(), -float('inf'))
 
         ### YOUR CODE HERE (~6 Lines)
         ### TODO:
